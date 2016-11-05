@@ -21,6 +21,7 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopInit() {
+        System.out.println("back into the fray");
 
     }
 
