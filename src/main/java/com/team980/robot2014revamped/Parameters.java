@@ -4,8 +4,8 @@ public class Parameters {
 
     // DRIVE SYSTEM
 
-    public static final int LEFT_DRIVE_MOTOR_CHANNEL = 1; //TODO verify
-    public static final int RIGHT_DRIVE_MOTOR_CHANNEL = 2;
+    public static final int LEFT_DRIVE_MOTOR_CHANNEL = 1;
+    public static final int RIGHT_DRIVE_MOTOR_CHANNEL = 0;
 
     public static final int SHIFT_SOLENOID_CHANNEL_A = 4; //reverse
     public static final int SHIFT_SOLENOID_CHANNEL_B = 5; //forward
