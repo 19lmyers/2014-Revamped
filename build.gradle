@@ -1,45 +1,50 @@
-/**
-Template file for classes using GradleRIO
-@author Jaci
-*/
-
-buildscript {
-  repositories {
-	mavenCentral()
-	maven {
-		name = "GradleRIO"
-		url = "http://dev.imjac.in/maven"
-	}
-  }
-  dependencies {
-    classpath group: 'jaci.openrio.gradle', name: 'GradleRIO', version: '+'			//Change this line if you wish to Update GradleRIO
-  }
+plugins {
+    id "jaci.openrio.gradle.GradleRIO" version "2017.0.5"
 }
 
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'eclipse'
-apply plugin: 'GradleRIO'                                 //Apply the GradleRIO plugin
+apply plugin: "java"
+apply plugin: "eclipse"
+apply plugin: "idea"
+//apply plugin: "GradleRIO"
 
-gradlerio.robotClass = "com.team980.robot2014revamped.Robot"   //The class for the main Robot Class. Used in manifest
-gradlerio.team = "980"                                   //Your FRC team number (e.g. 5333 for team 'Can't C#', or 47 for Chief Delphi)
-//gradlerio.rioIP = "10.53.33.20"                         //Uncomment to specify the IP address of the RIO
+frc {
+    team = "980"                            // Your team number. Required
+    robotClass = "com.team980.robot2014revamped.Robot"     // Your robot main class (where you implement RobotBase / IterativeRobot)
+
+    deployTimeout = 3                       // The time (in seconds) to wait before timing out on an SSH connection
+    //deployDirectory = "/home/lvuser"      // The directory to deploy your jar to
+    //rioIP = "10.XX.XX.2"                  // The IP Address of your RoboRIO. Automatically calculated from team number if not set
+    //rioHost = "my_roborio.local"          // The Hostname of your RoboRIO. Automatically calculated from team number if not set
+
+    //robotCommand = "./something_else"     // The command to run when starting your robot program. This is calculated by default, with runArguments
+    //runArguments = "--hello"              // The command-line arguments to launch your jar with. By default, there are none. Not used if robotCommand set
+    //useDebugCommand = true                // Set to true if you want to use a remote debugger with your robot program. Not used if robotCommand is set.
+}
+
+wpi {
+    wpilibVersion = "+"                   // The WPILib version to use. For this version of GradleRIO, must be a 2017 version
+    ntcoreVersion = "+"                   // The NetworkTables Core version to use.
+    opencvVersion = "+"                   // The OpenCV version to use
+    cscoreVersion = "+"                   // The CSCore version to use
+
+    talonSrxVersion = "+"                 // The CTRE Toolsuite (Talon SRX) version to use.
+}
+
+dependencies {
+    compile wpilib()
+    compile talonSrx()
+}
 
 def robotManifest = {
-  attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
-  attributes 'Robot-Class': gradlerio.robotClass
+    attributes 'Main-Class': 'edu.wpi.first.wpilibj.RobotBase'
+    attributes 'Robot-Class': frc.robotClass
 }
 
 jar {
-  from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-  manifest robotManifest
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    manifest robotManifest
 }
 
-task genJavadoc(type: Jar, dependsOn: javadoc) {
-  classifier = 'javadoc'
-  from javadoc.destinationDir
-}
-
-artifacts {
-  archives genJavadoc
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.2.1'
 }
