@@ -1,22 +1,19 @@
 package com.team980.robot2014revamped;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class Robot extends IterativeRobot {
 
+    private Joystick joystick;
+
+    private ShiftDrive shiftDrive;
+
     @Override
     public void robotInit() {
+        joystick = new Joystick(Parameters.DRIVE_JOYSTICK_CHANNEL);
 
-    }
-
-    @Override
-    public void autonomousInit() {
-
-    }
-
-    @Override
-    public void autonomousPeriodic() {
-
+        shiftDrive = new ShiftDrive();
     }
 
     @Override
@@ -27,7 +24,13 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void teleopPeriodic() {
+        shiftDrive.drive(joystick); //Drives robot
 
+        if (joystick.getRawButton(3)) { //3 manually enables high gear
+            shiftDrive.setHighGear(true);
+        } else if (joystick.getRawButton(4)) { //4 manually disables high gear
+            shiftDrive.setHighGear(false);
+        }
     }
 
     @Override
