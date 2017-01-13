@@ -24,8 +24,8 @@ public class ShiftDrive {
         //rightEncoder.setDistancePerPulse(Constants.DISTANCE_PER_PULSE);
 
         shiftSolenoid = new DoubleSolenoid(Parameters.PCM_CAN_ID,
-                Parameters.SHIFT_SOLENOID_CHANNEL_A,
-                Parameters.SHIFT_SOLENOID_CHANNEL_B);
+                Parameters.SHIFT_SOLENOID_CHANNEL_B,
+                Parameters.SHIFT_SOLENOID_CHANNEL_A);
 
         robotDrive = new RobotDrive(Parameters.LEFT_DRIVE_MOTOR_CHANNEL, Parameters.RIGHT_DRIVE_MOTOR_CHANNEL);
 
