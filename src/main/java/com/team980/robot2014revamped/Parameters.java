@@ -18,7 +18,7 @@ public class Parameters {
 
     // PNEUMATICS
 
-    public static final int PCM_CAN_ID = 0;
+    public static final int PCM_CAN_ID = 1;
 
     // JOYSTICKS
 
