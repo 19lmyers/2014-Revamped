@@ -13,8 +13,10 @@ frc {
 
     deployTimeout = 3                       // The time (in seconds) to wait before timing out on an SSH connection
     //deployDirectory = "/home/lvuser"      // The directory to deploy your jar to
-    //rioIP = "10.XX.XX.2"                  // The IP Address of your RoboRIO. Automatically calculated from team number if not set
-    //rioHost = "my_roborio.local"          // The Hostname of your RoboRIO. Automatically calculated from team number if not set
+    //rioIP = "10.9.80.46"                  // The IP Address of your RoboRIO. Automatically calculated from team number if not set
+    
+    //Strange glitch that only applies to this robot
+    rioHost = "roboRIO-980-frc.frc-robot.local"          // The Hostname of your RoboRIO. Automatically calculated from team number if not set
 
     //robotCommand = "./something_else"     // The command to run when starting your robot program. This is calculated by default, with runArguments
     //runArguments = "--hello"              // The command-line arguments to launch your jar with. By default, there are none. Not used if robotCommand set
