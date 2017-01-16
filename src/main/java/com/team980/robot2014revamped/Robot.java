@@ -1,6 +1,5 @@
 package com.team980.robot2014revamped;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -9,22 +8,16 @@ public class Robot extends IterativeRobot {
     private Joystick joystick;
 
     private ShiftDrive shiftDrive;
-
-    private Compressor compressor;
-
     @Override
     public void robotInit() {
         joystick = new Joystick(Parameters.DRIVE_JOYSTICK_CHANNEL);
 
         shiftDrive = new ShiftDrive();
-
-        compressor = new Compressor(Parameters.PCM_CAN_ID);
-        compressor.setClosedLoopControl(true);
     }
 
     @Override
     public void teleopInit() {
-        System.out.println("back into the fray v3");
+        System.out.println("back into the fray v4");
 
     }
 
@@ -37,11 +30,6 @@ public class Robot extends IterativeRobot {
         }
 
         shiftDrive.drive(joystick); //Drives robot
-
-        System.out.println(compressor.enabled() + "");
-        System.out.println(compressor.getPressureSwitchValue() + "");
-        System.out.println(compressor.getCompressorCurrent() + "");
-        System.out.println("");
     }
 
     @Override
