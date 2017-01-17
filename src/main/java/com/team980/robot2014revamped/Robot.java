@@ -1,24 +1,30 @@
 package com.team980.robot2014revamped;
 
+import com.ctre.PigeonImu;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class Robot extends IterativeRobot {
 
     private Joystick joystick;
 
     private ShiftDrive shiftDrive;
+
+    private PigeonImu imu;
+
     @Override
     public void robotInit() {
         joystick = new Joystick(Parameters.DRIVE_JOYSTICK_CHANNEL);
 
         shiftDrive = new ShiftDrive();
+
+        imu = new PigeonImu(Parameters.PIGEON_IMU_CAN_ID);
     }
 
     @Override
     public void teleopInit() {
-        System.out.println("back into the fray v4");
-
+        System.out.println("back into the fray");
     }
 
     @Override
@@ -30,6 +36,8 @@ public class Robot extends IterativeRobot {
         }
 
         shiftDrive.drive(joystick); //Drives robot
+
+        NetworkTable.getTable("PigeonIMU").putNumber("AbsoluteCompassHeading", imu.GetAbsoluteCompassHeading());
     }
 
     @Override

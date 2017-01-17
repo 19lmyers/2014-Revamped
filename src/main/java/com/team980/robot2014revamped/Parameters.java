@@ -20,6 +20,10 @@ public class Parameters {
 
     public static final int PCM_CAN_ID = 1;
 
+    // IMU
+
+    public static final int PIGEON_IMU_CAN_ID = 2; //TODO
+
     // JOYSTICKS
 
     public static final int DRIVE_JOYSTICK_CHANNEL = 0;
