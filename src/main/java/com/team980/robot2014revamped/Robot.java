@@ -37,7 +37,13 @@ public class Robot extends IterativeRobot {
 
         shiftDrive.drive(joystick); //Drives robot
 
-        NetworkTable.getTable("PigeonIMU").putNumber("AbsoluteCompassHeading", imu.GetAbsoluteCompassHeading());
+        double[] ypr = new double[3];
+        imu.GetYawPitchRoll(ypr);
+
+        NetworkTable.getTable("PigeonIMU").putNumber("Yaw", ypr[0]);
+        NetworkTable.getTable("PigeonIMU").putNumber("Pitch", ypr[1]);
+        NetworkTable.getTable("PigeonIMU").putNumber("Roll", ypr[2]);
+
     }
 
     @Override
