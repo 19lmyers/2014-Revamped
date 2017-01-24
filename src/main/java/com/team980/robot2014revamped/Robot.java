@@ -15,9 +15,10 @@ public class Robot extends IterativeRobot {
 
     private PigeonImu imu;
 
-    private AutonomousState autoState;
+    private boolean isAutoFinished;
 
     private SendableChooser<AutoProgram> autoChooser;
+    private SendableChooser<Boolean> highGearAuto;
 
     @Override
     public void robotInit() {
@@ -27,19 +28,26 @@ public class Robot extends IterativeRobot {
 
         imu = new PigeonImu(Parameters.PIGEON_IMU_CAN_ID);
 
-        autoChooser = new SendableChooser<AutoProgram>();
-        autoChooser.addDefault("None", AutoProgram.NONE);
-        autoChooser.addObject("Turning Test", AutoProgram.TURN_TEST);
-        SmartDashboard.putData("Select Autonomous Mode:", autoChooser);
+        autoChooser = new SendableChooser<>();
+        for (AutoProgram program : AutoProgram.values()) {
+            autoChooser.addObject(program.toString(), program);
+        }
+        SmartDashboard.putData("autoChooser", autoChooser);
+
+        highGearAuto = new SendableChooser<>();
+        highGearAuto.addDefault("Low Gear", false);
+        highGearAuto.addObject("High Gear", true);
+        SmartDashboard.putData("highGearAuto", highGearAuto);
     }
 
     @Override
     public void autonomousInit() {
-        if (autoChooser.getSelected() == AutoProgram.NONE) {
-            return;
-        } else if (autoChooser.getSelected() == AutoProgram.TURN_TEST) {
-            autoState = AutonomousState.TURN_90_RIGHT;
-            imu.SetYaw(0); //reset yaw
+        isAutoFinished = false;
+
+        if (highGearAuto.getSelected()) { //should auto be in high gear?
+            shiftDrive.setHighGear(true);
+        } else {
+            shiftDrive.setHighGear(false);
         }
     }
 
@@ -47,44 +55,25 @@ public class Robot extends IterativeRobot {
     public void autonomousPeriodic() {
         if (autoChooser.getSelected() == AutoProgram.NONE) {
             return;
-        } else if (autoChooser.getSelected() == AutoProgram.TURN_TEST) {
+        } else if (!isAutoFinished) {
 
             double[] ypr = new double[3];
             imu.GetYawPitchRoll(ypr);
 
-            switch (autoState) {
-                case TURN_90_RIGHT:
-                    if (ypr[0] >= 90) {
-                        autoState = AutonomousState.TURN_180_LEFT;
-                        imu.SetYaw(0); //reset yaw
-                    } else {
-                        shiftDrive.drive(.3, -.3);
-                    }
-                    break;
-                case TURN_180_LEFT:
-                    if (ypr[0] <= -180) {
-                        autoState = AutonomousState.TURN_270_RIGHT;
-                        imu.SetYaw(0); //reset yaw
-                    } else {
-                        shiftDrive.drive(-.3, .3);
-                    }
-                    break;
-                case TURN_270_RIGHT:
-                    if (ypr[0] >= 270) {
-                        autoState = AutonomousState.TURN_720_LEFT;
-                        imu.SetYaw(0); //reset yaw
-                    } else {
-                        shiftDrive.drive(.3, -.3);
-                    }
-                    break;
-                case TURN_720_LEFT:
-                    if (ypr[0] <= -720) {
-                        autoState = AutonomousState.FINISHED;
-                        imu.SetYaw(0); //reset yaw
-                    } else {
-                        shiftDrive.drive(-.3, .3);
-                    }
-                    break;
+            if (autoChooser.getSelected().getThreshold() > 0) { //Is the threshold positive?
+                //rotate in positive direction (+ -)
+                if (ypr[0] >= autoChooser.getSelected().getThreshold()) {
+                    isAutoFinished = true;
+                } else {
+                    shiftDrive.drive(.3, -.3);
+                }
+            } else {
+                //rotate in negative direction (- +)
+                if (ypr[0] <= autoChooser.getSelected().getThreshold()) {
+                    isAutoFinished = false;
+                } else {
+                    shiftDrive.drive(-.3, .3);
+                }
             }
 
             NetworkTable.getTable("PigeonIMU").putNumber("Yaw", ypr[0]);
