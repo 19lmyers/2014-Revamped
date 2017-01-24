@@ -50,6 +50,10 @@ public class ShiftDrive {
         robotDrive.arcadeDrive(driveStick, Joystick.AxisType.kY.value, driveStick, Joystick.AxisType.kZ.value);
     }
 
+    public void drive(double left, double right) {
+        robotDrive.setLeftRightMotorOutputs(left, right);
+    }
+
     public void setHighGear(boolean enable) { //TODO verify
         if (enable) {
             shiftSolenoid.set(DoubleSolenoid.Value.kForward);
