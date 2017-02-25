@@ -7,9 +7,12 @@ import edu.wpi.first.wpilibj.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import java.io.*;
+
 public class Robot extends IterativeRobot {
 
-    private Joystick joystick;
+    private Joystick driveStick;
+    private Joystick driveWheel;
 
     private ShiftDrive shiftDrive;
 
@@ -20,9 +23,12 @@ public class Robot extends IterativeRobot {
     private SendableChooser<AutoProgram> autoChooser;
     private SendableChooser<Boolean> highGearAuto;
 
+    private PrintWriter writer;
+
     @Override
     public void robotInit() {
-        joystick = new Joystick(Parameters.DRIVE_JOYSTICK_CHANNEL);
+        driveStick = new Joystick(Parameters.DRIVE_JOYSTICK_CHANNEL);
+        driveWheel = new Joystick(Parameters.DRIVE_WHEEL_CHANNEL);
 
         shiftDrive = new ShiftDrive();
 
@@ -85,17 +91,25 @@ public class Robot extends IterativeRobot {
     @Override
     public void teleopInit() {
         System.out.println("back into the fray");
+
+        try {
+            writer = new PrintWriter("teleop.txt", "UTF-8");
+        } catch (UnsupportedEncodingException | FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        writer.println(System.currentTimeMillis() + ": ENABLING ROBOT");
     }
 
     @Override
     public void teleopPeriodic() {
-        if (joystick.getRawButton(3)) { //3 manually enables high gear
+        if (driveStick.getRawButton(3)) { //3 manually enables high gear
             shiftDrive.setHighGear(true);
-        } else if (joystick.getRawButton(4)) { //4 manually disables high gear
+        } else if (driveStick.getRawButton(4)) { //4 manually disables high gear
             shiftDrive.setHighGear(false);
         }
 
-        shiftDrive.drive(joystick); //Drives robot
+        shiftDrive.drive(driveStick, driveWheel); //Drives robot
 
         double[] ypr = new double[3];
         imu.GetYawPitchRoll(ypr);
@@ -104,10 +118,16 @@ public class Robot extends IterativeRobot {
         NetworkTable.getTable("PigeonIMU").putNumber("Pitch", ypr[1]);
         NetworkTable.getTable("PigeonIMU").putNumber("Roll", ypr[2]);
 
+
+        writer.print(System.currentTimeMillis() + ": ");
+        writer.print("yaw: " + ypr[0] + ", ");
+        writer.print("pitch: " + ypr[1] + ", ");
+        writer.println("roll: " + ypr[2]);
     }
 
     @Override
     public void disabledInit() {
-
+        writer.println(System.currentTimeMillis() + ": DISABLING ROBOT");
+        writer.close();
     }
 }

@@ -10,6 +10,8 @@ public class Parameters {
     public static final int SHIFT_SOLENOID_CHANNEL_A = 4; //reverse
     public static final int SHIFT_SOLENOID_CHANNEL_B = 5; //forward
 
+    public static final double TURN_GAIN = 1.0;
+
     //public static final int LEFT_DRIVE_ENCODER_CHANNEL_A = 0;
     //public static final int LEFT_DRIVE_ENCODER_CHANNEL_B = 0;
 
@@ -27,5 +29,6 @@ public class Parameters {
     // JOYSTICKS
 
     public static final int DRIVE_JOYSTICK_CHANNEL = 0;
+    public static final int DRIVE_WHEEL_CHANNEL = 1;
 
 }

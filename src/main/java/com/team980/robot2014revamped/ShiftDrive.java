@@ -32,7 +32,28 @@ public class ShiftDrive {
         inHighGear = false;
     }
 
-    public void drive(Joystick driveStick) {
+    public void drive(Joystick driveStick, Joystick driveWheel) {
+
+        //Calculate velocity from input and set setpoints
+        double turnValue = driveWheel.getAxis(Joystick.AxisType.kX);
+        double throttleValue = -driveStick.getAxis(Joystick.AxisType.kY);
+
+        if (java.lang.Math.abs(driveWheel.getAxis(Joystick.AxisType.kX)) < 0.2) {
+            turnValue = 0.0;
+        }
+        if (java.lang.Math.abs(driveStick.getAxis(Joystick.AxisType.kY)) < 0.2) {
+            throttleValue = 0.0;
+        }
+
+        if (throttleValue < -0.2) {
+            turnValue = -turnValue;
+        }
+
+        double rawLeft = throttleValue + turnValue;
+        double rawRight = throttleValue - turnValue;
+
+        double leftMotorCommand = rawLeft - skimValue(rawRight) - skimValue(rawLeft);
+        double rightMotorCommand = rawRight - skimValue(rawLeft) - skimValue(rawRight);
 
         //IF NOT TURNING, then check for shifting velocities and shift
         /*if (leftEncoder.getDirection() == rightEncoder.getDirection()) { //Are we not turning (encoder directions match)?
@@ -47,7 +68,7 @@ public class ShiftDrive {
         }*/
 
         //DRIVE THE ROBOT
-        robotDrive.arcadeDrive(driveStick, Joystick.AxisType.kY.value, driveStick, Joystick.AxisType.kZ.value);
+        robotDrive.setLeftRightMotorOutputs(leftMotorCommand, rightMotorCommand);
     }
 
     public void drive(double left, double right) {
@@ -62,5 +83,13 @@ public class ShiftDrive {
             shiftSolenoid.set(DoubleSolenoid.Value.kReverse);
             inHighGear = false;
         }
+    }
+
+    private double skimValue(double inputValue) {
+        if (inputValue > 1.0)
+            return ((inputValue - 1.0) * Parameters.TURN_GAIN);
+        else if (inputValue < -1.0)
+            return ((inputValue + 1.0) * Parameters.TURN_GAIN);
+        return 0;
     }
 }
