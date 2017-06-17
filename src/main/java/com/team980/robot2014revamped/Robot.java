@@ -15,6 +15,7 @@ public class Robot extends IterativeRobot {
     private Joystick driveWheel;
 
     private ShiftDrive shiftDrive;
+    private BallSystem ballSystem;
 
     private PigeonImu imu;
 
@@ -31,6 +32,7 @@ public class Robot extends IterativeRobot {
         driveWheel = new Joystick(Parameters.DRIVE_WHEEL_CHANNEL);
 
         shiftDrive = new ShiftDrive();
+        ballSystem = new BallSystem();
 
         imu = new PigeonImu(Parameters.PIGEON_IMU_CAN_ID);
 
@@ -92,6 +94,8 @@ public class Robot extends IterativeRobot {
     public void teleopInit() {
         System.out.println("back into the fray");
 
+        //ballSystem.init(); TODO
+
         try {
             writer = new PrintWriter("teleop.txt", "UTF-8");
         } catch (UnsupportedEncodingException | FileNotFoundException e) {
@@ -110,6 +114,10 @@ public class Robot extends IterativeRobot {
         }
 
         shiftDrive.drive(driveStick, driveWheel); //Drives robot
+
+        //ball system controls
+        //TODO https://github.com/Team980/2014/blob/master/MyRobot.cpp
+        //TODO https://github.com/Team980/2014/blob/master/BallSystem.cpp
 
         double[] ypr = new double[3];
         imu.GetYawPitchRoll(ypr);
