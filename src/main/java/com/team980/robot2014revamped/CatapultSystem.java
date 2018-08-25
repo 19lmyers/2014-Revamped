@@ -29,7 +29,7 @@ class CatapultSystem {
         rightLockSwitch = new DigitalInput(RIGHT_LOCK_SWITCH_DIO_CHANNEL);
         rightLockSwitch.setName("Catapult System", "Right Limit Switch");
 
-        lockingTimer = new Timer();
+        //lockingTimer = new Timer();
     }
 
     public CatapultState getState() {
