@@ -13,7 +13,7 @@ class CatapultSystem {
     private DigitalInput leftLockSwitch;
     private DigitalInput rightLockSwitch;
 
-    private Timer lockingTimer;
+    //private Timer lockingTimer;
 
     private CatapultState state = CatapultState.INITIALIZED;
 

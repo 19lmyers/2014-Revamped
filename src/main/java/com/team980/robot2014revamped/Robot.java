@@ -96,10 +96,10 @@ public class Robot extends IterativeRobot {
 
         if (xboxController.getAButton()) {
             leftRollerMotor.set(ROLLER_MOTOR_INTAKE_SPEED);
-            rightRollerMotor.set(ROLLER_MOTOR_INTAKE_SPEED);
+            rightRollerMotor.set(-ROLLER_MOTOR_INTAKE_SPEED);
         } else if (xboxController.getXButton()) {
             leftRollerMotor.set(ROLLER_MOTOR_OUTPUT_SPEED);
-            rightRollerMotor.set(ROLLER_MOTOR_OUTPUT_SPEED);
+            rightRollerMotor.set(-ROLLER_MOTOR_OUTPUT_SPEED);
         } else if (xboxController.getBButton()) {
             leftRollerMotor.set(0);
             rightRollerMotor.set(0);

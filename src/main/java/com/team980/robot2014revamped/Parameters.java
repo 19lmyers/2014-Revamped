@@ -24,8 +24,8 @@ class Parameters {
     static final int LEFT_ROLLER_MOTOR_PWM_CHANNEL = 4;
     static final int RIGHT_ROLLER_MOTOR_PWM_CHANNEL = 3;
 
-    static final double ROLLER_MOTOR_INTAKE_SPEED = 0.3;
-    static final double ROLLER_MOTOR_OUTPUT_SPEED = -0.3;
+    static final double ROLLER_MOTOR_INTAKE_SPEED = 0.5;
+    static final double ROLLER_MOTOR_OUTPUT_SPEED = -0.5;
 
     // --- CATAPULT SYSTEM ---
     static final int WINCH_MOTOR_PWM_CHANNEL = 2;
@@ -34,7 +34,7 @@ class Parameters {
     static final int RIGHT_LOCK_SWITCH_DIO_CHANNEL = 1;
 
     static final double WINCH_MOTOR_SPEED = -0.6;
-    static final double WINCH_LOCK_DELAY = 1.0; //in seconds
+    //static final double WINCH_LOCK_DELAY = 1.0; //in seconds
 
     // --- PNEUMATICS ---
     static final int PCM_CAN_ID = 1;
