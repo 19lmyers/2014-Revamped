@@ -24,10 +24,21 @@
 
 package com.team980.robot2014revamped;
 
-class Constants {
-    static final double PI = 3.14;
+import edu.wpi.first.wpilibj.RobotBase;
 
-    static final double DRIVE_WHEEL_RADIUS = 2.0; //in inches //TODO
-    static final double DRIVE_ENCODER_PULSES_PER_REVOLUTION = 2048.0; //TODO
-    static final double DRIVE_SYSTEM_GEAR_RATIO = 1.0; //TODO
+/**
+ * This class should not be modified in any way, except to change the Robot class!
+ */
+public final class Main {
+
+    private Main() {
+    }
+
+    /**
+     * Main initialization function. Do not perform any initialization here.
+     * If you change your main robot class, change the parameter type.
+     */
+    public static void main(String... args) {
+        RobotBase.startRobot(Robot::new);
+    }
 }

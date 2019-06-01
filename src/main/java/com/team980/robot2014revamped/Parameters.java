@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2018 FRC Team 980 ThunderBots
+ *  Copyright (c) 2018-2019 FRC Team 980 ThunderBots
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -63,11 +63,11 @@ class Parameters {
     // --- PNEUMATICS ---
     static final int PCM_CAN_ID = 1;
 
-    /*static final int SHIFT_SOLENOID_CHANNEL_A = 0;
-    static final int SHIFT_SOLENOID_CHANNEL_B = 1;*/
+    static final int SHIFT_SOLENOID_CHANNEL_A = 0;
+    static final int SHIFT_SOLENOID_CHANNEL_B = 1;
 
-    /*static final DoubleSolenoid.Value LOW_GEAR_SOLENOID_VALUE = DoubleSolenoid.Value.kForward;
-    static final DoubleSolenoid.Value HIGH_GEAR_SOLENOID_VALUE = DoubleSolenoid.Value.kReverse;*/
+    static final DoubleSolenoid.Value LOW_GEAR_SOLENOID_VALUE = DoubleSolenoid.Value.kForward;
+    static final DoubleSolenoid.Value HIGH_GEAR_SOLENOID_VALUE = DoubleSolenoid.Value.kReverse;
 
     static final int ROLLER_SOLENOID_CHANNEL_A = 3;
     static final int ROLLER_SOLENOID_CHANNEL_B = 4;

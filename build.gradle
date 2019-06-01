@@ -1,18 +1,18 @@
 /*
  *  MIT License
  *  
- *  Copyright (c) 2018 FRC Team 980 ThunderBots
- *  
+ *  Copyright (c) 2018-2019 FRC Team 980 ThunderBots
+ *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
  *  in the Software without restriction, including without limitation the rights
  *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  *  copies of the Software, and to permit persons to whom the Software is
  *  furnished to do so, subject to the following conditions:
- *  
+ *
  *  The above copyright notice and this permission notice shall be included in all
  *  copies or substantial portions of the Software.
- *  
+ *
  *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,52 +22,45 @@
  *  SOFTWARE.
  */
 
-import jaci.openrio.gradle.GradleRIOPlugin
-import jaci.openrio.gradle.frc.FRCJavaArtifact
-import jaci.openrio.gradle.frc.RoboRIO
+import edu.wpi.first.gradlerio.GradleRIOPlugin
 
 plugins {
     id "java"
-    id "eclipse"
     id "idea"
-    id "jaci.openrio.gradle.GradleRIO" version "2018.03.06"
+    id "eclipse"
+    id "edu.wpi.first.GradleRIO" version "2019.4.1"
 }
 
-def TEAM = 980
-def ROBOT_CLASS = "com.team980.robot2014revamped.Robot"
+def MAIN_CLASS = "com.team980.robot2014revamped.Main"
 
-// Define my targets (RoboRIO) and artifacts (deployable files)
-// This is added by GradleRIO's backing project EmbeddedTools.
+// Instructions on how to configure this are available here:
+// https://github.com/JacisNonsense/EmbeddedTools#spec
 deploy {
     targets {
-        target("roborio", RoboRIO) {
-            team = TEAM
-            addresses << "10.9.80.3"
+        roboRIO("roborio") {
+            team = 980
+            //addresses << '10.9.80.2' << 172.22.11.2' //In order of preference
         }
     }
     artifacts {
-        artifact('frcJava', FRCJavaArtifact) {
+        frcJavaArtifact("frcJava") {
             targets << "roborio"
         }
     }
 }
 
-// Defining my dependencies. In this case, WPILib (+ friends), CTRE Phoenix (Talon SRX)
-// and NavX.
 dependencies {
-    compile wpilib()
-    compile ctre()
-    compile navx()
+    compile wpi.deps.wpilib()
+    compile wpi.deps.vendor.java()
+    nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
+    nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
 }
 
-// Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')
-// in order to make them all available at runtime. Also adding the manifest so WPILib
-// knows where to look for our Robot Class.
 jar {
-    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    manifest GradleRIOPlugin.javaManifest(ROBOT_CLASS)
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    manifest GradleRIOPlugin.javaManifest(MAIN_CLASS)
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4'
+wrapper {
+    gradleVersion = '5.1'
 }

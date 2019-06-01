@@ -1,7 +1,7 @@
 /*
  *  MIT License
  *
- *  Copyright (c) 2018 FRC Team 980 ThunderBots
+ *  Copyright (c) 2018-2019 FRC Team 980 ThunderBots
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the "Software"), to deal
@@ -40,10 +40,10 @@ public class Robot extends IterativeRobot {
     private DifferentialDrive robotDrive;
 
     /*private Encoder leftDriveEncoder;
-    private Encoder rightDriveEncoder;
+    private Encoder rightDriveEncoder;*/
 
     private DoubleSolenoid shifterSolenoid;
-    private Gear currentGear;*/
+    private Gear currentGear;
 
     private VictorSP leftRollerMotor;
     private VictorSP rightRollerMotor;
@@ -71,9 +71,9 @@ public class Robot extends IterativeRobot {
 
         rightDriveEncoder = new Encoder(Parameters.RIGHT_DRIVE_ENCODER_DIO_CHANNEL_A, Parameters.RIGHT_DRIVE_ENCODER_DIO_CHANNEL_B, Parameters.INVERT_RIGHT_DRIVE_ENCODER, CounterBase.EncodingType.k4X);
         rightDriveEncoder.setDistancePerPulse((2 * (Constants.PI) * (Constants.DRIVE_WHEEL_RADIUS / 12)) / (Constants.DRIVE_ENCODER_PULSES_PER_REVOLUTION * Constants.DRIVE_SYSTEM_GEAR_RATIO));
-        rightDriveEncoder.setName("Drive Encoders", "Right");
+        rightDriveEncoder.setName("Drive Encoders", "Right");*/
 
-        shifterSolenoid = new DoubleSolenoid(PCM_CAN_ID, SHIFT_SOLENOID_CHANNEL_A, SHIFT_SOLENOID_CHANNEL_B);*/
+        shifterSolenoid = new DoubleSolenoid(PCM_CAN_ID, SHIFT_SOLENOID_CHANNEL_A, SHIFT_SOLENOID_CHANNEL_B);
 
         leftRollerMotor = new VictorSP(LEFT_ROLLER_MOTOR_PWM_CHANNEL);
         leftRollerMotor.setName("Roller System", "Left Motor");
@@ -89,14 +89,14 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void robotPeriodic() {
-        /*table.getSubTable("Status Flags").getEntry("Gear").setString(currentGear.name());*/
+        table.getSubTable("Status Flags").getEntry("Gear").setString(currentGear.name());
         table.getSubTable("Status Flags").getEntry("Roller State").setString(currentRollerState.name());
         table.getSubTable("Status Flags").getEntry("Catapult State").setString(catapultSystem.getState().name());
     }
 
     @Override
     public void teleopInit() {
-        //setGear(Gear.LOW_GEAR);
+        setGear(Gear.LOW_GEAR);
         setRollerState(RollerState.EXTENDED);
         catapultSystem.init();
     }
@@ -111,6 +111,12 @@ public class Robot extends IterativeRobot {
                 && Math.abs(rightDriveEncoder.getRate()) < Parameters.LOWER_SHIFT_THRESHOLD && currentGear == Gear.HIGH_GEAR) {
             setGear(Gear.LOW_GEAR);
         }*/
+
+        if (xboxController.getBackButtonPressed()) {
+            setGear(Gear.LOW_GEAR);
+        } else if (xboxController.getStartButtonPressed()) {
+            setGear(Gear.HIGH_GEAR);
+        }
 
         if (xboxController.getBumper(GenericHID.Hand.kLeft)) {
             setRollerState(RollerState.RETRACTED);
@@ -138,6 +144,8 @@ public class Robot extends IterativeRobot {
 
     @Override
     public void disabledInit() {
+        setGear(Gear.HIGH_GEAR);
+
         robotDrive.stopMotor();
 
         leftRollerMotor.disable();
@@ -146,17 +154,17 @@ public class Robot extends IterativeRobot {
         catapultSystem.disable();
     }
 
-    /*private void setGear(Gear gear) {
+    private void setGear(Gear gear) {
         currentGear = gear;
         shifterSolenoid.set(gear.getSolenoidValue());
-    }*/
+    }
 
     private void setRollerState(RollerState rollerState) {
         currentRollerState = rollerState;
         rollerSolenoid.set(rollerState.getSolenoidValue());
     }
 
-    /*private enum Gear {
+    private enum Gear {
         LOW_GEAR(LOW_GEAR_SOLENOID_VALUE),
         HIGH_GEAR(HIGH_GEAR_SOLENOID_VALUE);
 
@@ -169,7 +177,7 @@ public class Robot extends IterativeRobot {
         DoubleSolenoid.Value getSolenoidValue() {
             return solenoidValue;
         }
-    }*/
+    }
 
     public enum RollerState {
         RETRACTED(ROLLER_RETRACTED_SOLENOID_VALUE),
